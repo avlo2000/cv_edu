@@ -1,21 +1,15 @@
-import sys
-
-import torch
 import torch.utils.data
-from distinctipy import distinctipy
-from matplotlib import pyplot as plt
-from torch import nn, optim
 from torchsummary import summary
 from torchvision import transforms, datasets
 
-from autoencoders.cnn_autoencoder import CNNAutoEncoder
-from autoencoders.autoencoder import Autoencoder
+from autoencoders.big_cnn_autoencoder import BigCNNAutoencoder
+from autoencoders.pretrained_autoencoder import PretrainedAutoencoder
+from autoencoders.utils import plot_latent_space, train, try_out
 
-torch.use_deterministic_algorithms(True)
-EPOCH_COUNT = 1
-BATCH_SIZE = 16
-
-print(torch.cuda.is_available())
+EPOCH_COUNT = 10
+BATCH_SIZE = 128
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print(f"Device: {device}")
 data_transforms = transforms.Compose([transforms.ToTensor()])
 
 train_data = datasets.CIFAR10(
@@ -29,71 +23,18 @@ test_data = datasets.CIFAR10(
     train=False,
     transform=data_transforms
 )
-
 train_data_loader = torch.utils.data.DataLoader(train_data, batch_size=BATCH_SIZE, shuffle=True)
 test_data_loader = torch.utils.data.DataLoader(test_data, batch_size=BATCH_SIZE, shuffle=True)
 in_shape: torch.Size = next(iter(train_data_loader))[0].shape
 
 
-model = Autoencoder(in_shape=in_shape[1:], encoded_space_dim=2)
-summary(model, input_size=in_shape[1:], device='cpu')
+# model = BigCNNAutoencoder(in_shape=in_shape[1:], encoded_space_dim=16).to(device)
+model = PretrainedAutoencoder().to(device)
+state_dict = torch.load('./assets/chenjie/autoencoder.pkl')
+model.load_state_dict(state_dict)
+summary(model, input_size=in_shape[1:], device=device)
 
 
-def plot_latent_space():
-    import pandas as pd
-    import numpy as np
-
-    x, y, labels = [], [], []
-    for instance, label in test_data:
-        latent = model.encoder(torch.unsqueeze(instance, dim=0)).detach().numpy()
-        x.append(latent[:, 0])
-        y.append(latent[:, 1])
-        labels.append(label)
-
-    df = pd.DataFrame({"x": np.squeeze(np.array(x)),
-                       "y": np.squeeze(np.array(y)),
-                       "label": np.squeeze(np.array(labels))})
-    fig, ax = plt.subplots()
-
-    classes = ('plane', 'car', 'bird', 'cat',
-               'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
-    for i, dff in df.groupby("label"):
-        ax.scatter(dff['x'], dff['y'], s=50, label=classes[i])
-    ax.legend()
-    plt.show()
-
-
-def train():
-    loss_fn = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.01)
-
-    for epoch in range(EPOCH_COUNT):
-        print()
-        for i, sample in enumerate(train_data_loader, 0):
-            x, _ = sample
-            x.requires_grad = True
-
-            optimizer.zero_grad()
-
-            x_pred = model(x)
-            loss = loss_fn(x_pred, x)
-            loss.backward()
-            optimizer.step()
-
-            if i % 20 == 0:
-                sys.stdout.write(f'\r[Epoch: {epoch + 1}, Iter:{i + 1:5d}/{len(train_data_loader)}]'
-                                 f' loss: {loss.item():.3f}'
-                                 )
-        checkpoint_path = f'./assets/checkpoint_{epoch + 1}.pt'
-        print()
-        print(f'Saving checkpoint to {checkpoint_path}')
-        torch.save(model, checkpoint_path)
-        print("-" * 100)
-
-    print("-" * 100)
-    print("Testing...")
-
-
-# plot_latent_space()
-train()
-plot_latent_space()
+# train(model, EPOCH_COUNT, train_data_loader, device)
+try_out(model, next(iter(test_data_loader))[0], device)
+# plot_latent_space(model, test_data, device, test_data.classes)

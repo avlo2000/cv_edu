@@ -28,4 +28,5 @@ class VariationalAutoencoder(nn.Module):
         mean = self.encoder_mean(x)
         encoded_x = mean + sigma * self.distribution.sample(mean.shape)
         decoded_x = self.decoder(encoded_x)
-        return torch.reshape(decoded_x, (x.size(0), *self.input_shape))
+        decoded_x = torch.reshape(decoded_x, (x.size(0), *self.input_shape))
+        return decoded_x
