@@ -21,12 +21,19 @@ class VariationalAutoencoder(nn.Module):
         )
 
         self.distribution = torch.distributions.Normal(0, 1)
+        self.sigma = torch.empty(encoded_space_dim)
+        self.mean = torch.empty(encoded_space_dim)
 
     def forward(self, x):
         x = self.encoder_head(x)
-        sigma = self.encoder_sigma(x)
-        mean = self.encoder_mean(x)
-        encoded_x = mean + sigma * self.distribution.sample(mean.shape)
+        self.sigma = self.encoder_sigma(x)
+        self.mean = self.encoder_mean(x)
+        encoded_x = self.mean + self.sigma * self.distribution.sample(self.mean.shape)
         decoded_x = self.decoder(encoded_x)
         decoded_x = torch.reshape(decoded_x, (x.size(0), *self.input_shape))
         return decoded_x
+
+    def kl_divergence(self, trg_mean, trg_sigma):
+        kl_div = torch.log(trg_sigma / self.sigma) +\
+                 (self.sigma ** 2 + (self.mean - trg_mean) ** 2) / (2 * trg_sigma ** 2) - 0.5
+        return kl_div
