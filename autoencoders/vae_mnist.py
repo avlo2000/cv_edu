@@ -5,10 +5,8 @@ import torchvision.transforms as transforms
 from torchsummary import summary
 from torchvision import datasets
 
-from autoencoders.autoencoder import Autoencoder
-from autoencoders.big_cnn_autoencoder import BigCNNAutoencoder
-from autoencoders.cnn_autoencoder import CNNAutoencoder
-from autoencoders.utils import plot_latent_space, train, try_out
+from autoencoders.variational_autoencoder import VariationalAutoencoder
+from autoencoders.utils import plot_latent_space, train, try_out, vae_train_step
 
 EPOCH_COUNT = 30
 BATCH_SIZE = 64
@@ -35,11 +33,13 @@ test_data_loader = torch.utils.data.DataLoader(test_data, batch_size=BATCH_SIZE,
 in_shape: torch.Size = train_data[0][0].shape
 
 
-model = Autoencoder(in_shape=in_shape, encoded_space_dim=2).to(device)
+model = VariationalAutoencoder(in_shape=in_shape, encoded_space_dim=2).to(device)
 summary(model, input_size=in_shape, device=device)
 
+
 try_out(model, next(iter(test_data_loader))[0], device)
-train(model, EPOCH_COUNT, train_data_loader, device)
+plot_latent_space(model, test_data, device, classes)
+train(model, EPOCH_COUNT, train_data_loader, device, vae_train_step)
 print("Testing...")
 plot_latent_space(model, test_data, device, classes)
 try_out(model, next(iter(test_data_loader))[0], device)

@@ -38,3 +38,5 @@ summary(model, input_size=in_shape[1:], device=device)
 # train(model, EPOCH_COUNT, train_data_loader, device)
 try_out(model, next(iter(test_data_loader))[0], device)
 # plot_latent_space(model, test_data, device, test_data.classes)
+
+torch.linalg.tensorinv
