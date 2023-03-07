@@ -58,6 +58,22 @@ def vae_train_step(vae_model, sample, device, optimizer, loss_fn):
     return loss.item()
 
 
+def train_single_batch(model, epoch_count, train_data_loader, device, train_step_fn=train_step):
+    loss_fn = nn.MSELoss(reduction='sum')
+    optimizer = optim.Adam(model.parameters(), lr=0.001, betas=(0.95, 0.99))
+
+    for epoch in range(epoch_count):
+        total_loss = 0
+        sample = next(iter(train_data_loader))
+        loss = train_step_fn(model, sample, device, optimizer, loss_fn)
+        total_loss += loss
+
+        sys.stdout.write(
+            f'\r[Epoch: {epoch + 1}/{epoch_count}]'
+            f' loss: {total_loss:.3f}'
+        )
+
+
 def train(model, epoch_count, train_data_loader, device, train_step_fn=train_step):
     loss_fn = nn.MSELoss(reduction='sum')
     optimizer = optim.Adam(model.parameters(), lr=0.001, betas=(0.95, 0.99))

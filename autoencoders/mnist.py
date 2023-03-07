@@ -8,7 +8,7 @@ from torchvision import datasets
 from autoencoders.autoencoder import Autoencoder
 from autoencoders.big_cnn_autoencoder import BigCNNAutoencoder
 from autoencoders.cnn_autoencoder import CNNAutoencoder
-from autoencoders.utils import plot_latent_space, train, try_out
+from autoencoders.utils import plot_latent_space, train, try_out, train_single_batch
 
 EPOCH_COUNT = 30
 BATCH_SIZE = 64
@@ -39,7 +39,7 @@ model = Autoencoder(in_shape=in_shape, encoded_space_dim=2).to(device)
 summary(model, input_size=in_shape, device=device)
 
 try_out(model, next(iter(test_data_loader))[0], device)
-train(model, EPOCH_COUNT, train_data_loader, device)
+train_single_batch(model, 10000, train_data_loader, device)
 print("Testing...")
 plot_latent_space(model, test_data, device, classes)
 try_out(model, next(iter(test_data_loader))[0], device)
