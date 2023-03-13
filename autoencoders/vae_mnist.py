@@ -5,10 +5,11 @@ import torchvision.transforms as transforms
 from torchsummary import summary
 from torchvision import datasets
 
+from autoencoders.train_utils import train, vae_train_step
 from autoencoders.variational_autoencoder import VariationalAutoencoder
-from autoencoders.utils import plot_latent_space, train, try_out, vae_train_step
+from autoencoders.utils import plot_latent_space, try_out
 
-EPOCH_COUNT = 30
+EPOCH_COUNT = 5
 BATCH_SIZE = 64
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Device: {device}")

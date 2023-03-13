@@ -1,0 +1,371 @@
+Device: cuda
+Train size: 1504
+Test size: 188
+Val size: 188
+----------------------------------------------------------------
+        Layer (type)               Output Shape         Param #
+================================================================
+            Conv2d-1         [-1, 16, 128, 128]             432
+       BatchNorm2d-2         [-1, 16, 128, 128]              32
+         Hardswish-3         [-1, 16, 128, 128]               0
+            Conv2d-4           [-1, 16, 64, 64]             144
+       BatchNorm2d-5           [-1, 16, 64, 64]              32
+              ReLU-6           [-1, 16, 64, 64]               0
+ AdaptiveAvgPool2d-7             [-1, 16, 1, 1]               0
+            Conv2d-8              [-1, 8, 1, 1]             136
+              ReLU-9              [-1, 8, 1, 1]               0
+           Conv2d-10             [-1, 16, 1, 1]             144
+      Hardsigmoid-11             [-1, 16, 1, 1]               0
+SqueezeExcitation-12           [-1, 16, 64, 64]               0
+           Conv2d-13           [-1, 16, 64, 64]             256
+      BatchNorm2d-14           [-1, 16, 64, 64]              32
+ InvertedResidual-15           [-1, 16, 64, 64]               0
+           Conv2d-16           [-1, 72, 64, 64]           1,152
+      BatchNorm2d-17           [-1, 72, 64, 64]             144
+             ReLU-18           [-1, 72, 64, 64]               0
+           Conv2d-19           [-1, 72, 32, 32]             648
+      BatchNorm2d-20           [-1, 72, 32, 32]             144
+             ReLU-21           [-1, 72, 32, 32]               0
+           Conv2d-22           [-1, 24, 32, 32]           1,728
+      BatchNorm2d-23           [-1, 24, 32, 32]              48
+ InvertedResidual-24           [-1, 24, 32, 32]               0
+           Conv2d-25           [-1, 88, 32, 32]           2,112
+      BatchNorm2d-26           [-1, 88, 32, 32]             176
+             ReLU-27           [-1, 88, 32, 32]               0
+           Conv2d-28           [-1, 88, 32, 32]             792
+      BatchNorm2d-29           [-1, 88, 32, 32]             176
+             ReLU-30           [-1, 88, 32, 32]               0
+           Conv2d-31           [-1, 24, 32, 32]           2,112
+      BatchNorm2d-32           [-1, 24, 32, 32]              48
+ InvertedResidual-33           [-1, 24, 32, 32]               0
+           Conv2d-34           [-1, 96, 32, 32]           2,304
+      BatchNorm2d-35           [-1, 96, 32, 32]             192
+        Hardswish-36           [-1, 96, 32, 32]               0
+           Conv2d-37           [-1, 96, 16, 16]           2,400
+      BatchNorm2d-38           [-1, 96, 16, 16]             192
+        Hardswish-39           [-1, 96, 16, 16]               0
+AdaptiveAvgPool2d-40             [-1, 96, 1, 1]               0
+           Conv2d-41             [-1, 24, 1, 1]           2,328
+             ReLU-42             [-1, 24, 1, 1]               0
+           Conv2d-43             [-1, 96, 1, 1]           2,400
+      Hardsigmoid-44             [-1, 96, 1, 1]               0
+SqueezeExcitation-45           [-1, 96, 16, 16]               0
+           Conv2d-46           [-1, 40, 16, 16]           3,840
+      BatchNorm2d-47           [-1, 40, 16, 16]              80
+ InvertedResidual-48           [-1, 40, 16, 16]               0
+           Conv2d-49          [-1, 240, 16, 16]           9,600
+      BatchNorm2d-50          [-1, 240, 16, 16]             480
+        Hardswish-51          [-1, 240, 16, 16]               0
+           Conv2d-52          [-1, 240, 16, 16]           6,000
+      BatchNorm2d-53          [-1, 240, 16, 16]             480
+        Hardswish-54          [-1, 240, 16, 16]               0
+AdaptiveAvgPool2d-55            [-1, 240, 1, 1]               0
+           Conv2d-56             [-1, 64, 1, 1]          15,424
+             ReLU-57             [-1, 64, 1, 1]               0
+           Conv2d-58            [-1, 240, 1, 1]          15,600
+      Hardsigmoid-59            [-1, 240, 1, 1]               0
+SqueezeExcitation-60          [-1, 240, 16, 16]               0
+           Conv2d-61           [-1, 40, 16, 16]           9,600
+      BatchNorm2d-62           [-1, 40, 16, 16]              80
+ InvertedResidual-63           [-1, 40, 16, 16]               0
+           Conv2d-64          [-1, 240, 16, 16]           9,600
+      BatchNorm2d-65          [-1, 240, 16, 16]             480
+        Hardswish-66          [-1, 240, 16, 16]               0
+           Conv2d-67          [-1, 240, 16, 16]           6,000
+      BatchNorm2d-68          [-1, 240, 16, 16]             480
+        Hardswish-69          [-1, 240, 16, 16]               0
+AdaptiveAvgPool2d-70            [-1, 240, 1, 1]               0
+           Conv2d-71             [-1, 64, 1, 1]          15,424
+             ReLU-72             [-1, 64, 1, 1]               0
+           Conv2d-73            [-1, 240, 1, 1]          15,600
+      Hardsigmoid-74            [-1, 240, 1, 1]               0
+SqueezeExcitation-75          [-1, 240, 16, 16]               0
+           Conv2d-76           [-1, 40, 16, 16]           9,600
+      BatchNorm2d-77           [-1, 40, 16, 16]              80
+ InvertedResidual-78           [-1, 40, 16, 16]               0
+           Conv2d-79          [-1, 120, 16, 16]           4,800
+      BatchNorm2d-80          [-1, 120, 16, 16]             240
+        Hardswish-81          [-1, 120, 16, 16]               0
+           Conv2d-82          [-1, 120, 16, 16]           3,000
+      BatchNorm2d-83          [-1, 120, 16, 16]             240
+        Hardswish-84          [-1, 120, 16, 16]               0
+AdaptiveAvgPool2d-85            [-1, 120, 1, 1]               0
+           Conv2d-86             [-1, 32, 1, 1]           3,872
+             ReLU-87             [-1, 32, 1, 1]               0
+           Conv2d-88            [-1, 120, 1, 1]           3,960
+      Hardsigmoid-89            [-1, 120, 1, 1]               0
+SqueezeExcitation-90          [-1, 120, 16, 16]               0
+           Conv2d-91           [-1, 48, 16, 16]           5,760
+      BatchNorm2d-92           [-1, 48, 16, 16]              96
+ InvertedResidual-93           [-1, 48, 16, 16]               0
+           Conv2d-94          [-1, 144, 16, 16]           6,912
+      BatchNorm2d-95          [-1, 144, 16, 16]             288
+        Hardswish-96          [-1, 144, 16, 16]               0
+           Conv2d-97          [-1, 144, 16, 16]           3,600
+      BatchNorm2d-98          [-1, 144, 16, 16]             288
+        Hardswish-99          [-1, 144, 16, 16]               0
+AdaptiveAvgPool2d-100            [-1, 144, 1, 1]               0
+          Conv2d-101             [-1, 40, 1, 1]           5,800
+            ReLU-102             [-1, 40, 1, 1]               0
+          Conv2d-103            [-1, 144, 1, 1]           5,904
+     Hardsigmoid-104            [-1, 144, 1, 1]               0
+SqueezeExcitation-105          [-1, 144, 16, 16]               0
+          Conv2d-106           [-1, 48, 16, 16]           6,912
+     BatchNorm2d-107           [-1, 48, 16, 16]              96
+InvertedResidual-108           [-1, 48, 16, 16]               0
+          Conv2d-109          [-1, 288, 16, 16]          13,824
+     BatchNorm2d-110          [-1, 288, 16, 16]             576
+       Hardswish-111          [-1, 288, 16, 16]               0
+          Conv2d-112            [-1, 288, 8, 8]           7,200
+     BatchNorm2d-113            [-1, 288, 8, 8]             576
+       Hardswish-114            [-1, 288, 8, 8]               0
+AdaptiveAvgPool2d-115            [-1, 288, 1, 1]               0
+          Conv2d-116             [-1, 72, 1, 1]          20,808
+            ReLU-117             [-1, 72, 1, 1]               0
+          Conv2d-118            [-1, 288, 1, 1]          21,024
+     Hardsigmoid-119            [-1, 288, 1, 1]               0
+SqueezeExcitation-120            [-1, 288, 8, 8]               0
+          Conv2d-121             [-1, 96, 8, 8]          27,648
+     BatchNorm2d-122             [-1, 96, 8, 8]             192
+InvertedResidual-123             [-1, 96, 8, 8]               0
+          Conv2d-124            [-1, 576, 8, 8]          55,296
+     BatchNorm2d-125            [-1, 576, 8, 8]           1,152
+       Hardswish-126            [-1, 576, 8, 8]               0
+          Conv2d-127            [-1, 576, 8, 8]          14,400
+     BatchNorm2d-128            [-1, 576, 8, 8]           1,152
+       Hardswish-129            [-1, 576, 8, 8]               0
+AdaptiveAvgPool2d-130            [-1, 576, 1, 1]               0
+          Conv2d-131            [-1, 144, 1, 1]          83,088
+            ReLU-132            [-1, 144, 1, 1]               0
+          Conv2d-133            [-1, 576, 1, 1]          83,520
+     Hardsigmoid-134            [-1, 576, 1, 1]               0
+SqueezeExcitation-135            [-1, 576, 8, 8]               0
+          Conv2d-136             [-1, 96, 8, 8]          55,296
+     BatchNorm2d-137             [-1, 96, 8, 8]             192
+InvertedResidual-138             [-1, 96, 8, 8]               0
+          Conv2d-139            [-1, 576, 8, 8]          55,296
+     BatchNorm2d-140            [-1, 576, 8, 8]           1,152
+       Hardswish-141            [-1, 576, 8, 8]               0
+          Conv2d-142            [-1, 576, 8, 8]          14,400
+     BatchNorm2d-143            [-1, 576, 8, 8]           1,152
+       Hardswish-144            [-1, 576, 8, 8]               0
+AdaptiveAvgPool2d-145            [-1, 576, 1, 1]               0
+          Conv2d-146            [-1, 144, 1, 1]          83,088
+            ReLU-147            [-1, 144, 1, 1]               0
+          Conv2d-148            [-1, 576, 1, 1]          83,520
+     Hardsigmoid-149            [-1, 576, 1, 1]               0
+SqueezeExcitation-150            [-1, 576, 8, 8]               0
+          Conv2d-151             [-1, 96, 8, 8]          55,296
+     BatchNorm2d-152             [-1, 96, 8, 8]             192
+InvertedResidual-153             [-1, 96, 8, 8]               0
+          Conv2d-154            [-1, 576, 8, 8]          55,296
+     BatchNorm2d-155            [-1, 576, 8, 8]           1,152
+       Hardswish-156            [-1, 576, 8, 8]               0
+AdaptiveAvgPool2d-157            [-1, 576, 1, 1]               0
+          Linear-158                 [-1, 1024]         590,848
+       Hardswish-159                 [-1, 1024]               0
+         Dropout-160                 [-1, 1024]               0
+          Linear-161                   [-1, 47]          48,175
+================================================================
+Total params: 1,566,031
+Trainable params: 1,566,031
+Non-trainable params: 0
+----------------------------------------------------------------
+Input size (MB): 0.75
+Forward/backward pass size (MB): 45.17
+Params size (MB): 5.97
+Estimated Total Size (MB): 51.89
+----------------------------------------------------------------
+Avg. loss: 3.853
+Accuracy: 0.011
+F1 score: 0.000
+Recall: 0.011
+Precision: 0.000
+
+[Epoch: 1/20, Iter:   94/94] batch loss: 3.616 total loss: 3.881
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 3.886
+Accuracy: 0.006
+F1 score: 0.000
+Recall: 0.006
+Precision: 0.000
+
+[Epoch: 2/20, Iter:   94/94] batch loss: 3.963 total loss: 3.773
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 3.865
+Accuracy: 0.017
+F1 score: 0.001
+Recall: 0.017
+Precision: 0.000
+
+[Epoch: 3/20, Iter:   94/94] batch loss: 3.471 total loss: 3.742
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 3.885
+Accuracy: 0.017
+F1 score: 0.002
+Recall: 0.017
+Precision: 0.001
+
+[Epoch: 4/20, Iter:   94/94] batch loss: 3.640 total loss: 3.695
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 3.904
+Accuracy: 0.034
+F1 score: 0.022
+Recall: 0.034
+Precision: 0.026
+
+[Epoch: 5/20, Iter:   94/94] batch loss: 3.786 total loss: 3.659
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 3.983
+Accuracy: 0.034
+F1 score: 0.006
+Recall: 0.034
+Precision: 0.004
+
+[Epoch: 6/20, Iter:   94/94] batch loss: 3.573 total loss: 3.647
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 4.189
+Accuracy: 0.028
+F1 score: 0.008
+Recall: 0.028
+Precision: 0.005
+
+[Epoch: 7/20, Iter:   94/94] batch loss: 3.598 total loss: 3.640
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 4.298
+Accuracy: 0.034
+F1 score: 0.023
+Recall: 0.034
+Precision: 0.051
+
+[Epoch: 8/20, Iter:   94/94] batch loss: 3.813 total loss: 3.640
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 3.840
+Accuracy: 0.068
+F1 score: 0.038
+Recall: 0.068
+Precision: 0.045
+
+[Epoch: 9/20, Iter:   94/94] batch loss: 3.823 total loss: 3.614
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 4.425
+Accuracy: 0.051
+F1 score: 0.021
+Recall: 0.051
+Precision: 0.020
+
+[Epoch: 10/20, Iter:   94/94] batch loss: 3.920 total loss: 3.590
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 3.734
+Accuracy: 0.057
+F1 score: 0.032
+Recall: 0.057
+Precision: 0.030
+
+[Epoch: 11/20, Iter:   94/94] batch loss: 3.016 total loss: 3.537
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 4.335
+Accuracy: 0.028
+F1 score: 0.022
+Recall: 0.028
+Precision: 0.034
+
+[Epoch: 12/20, Iter:   94/94] batch loss: 3.687 total loss: 3.549
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 3.883
+Accuracy: 0.068
+F1 score: 0.037
+Recall: 0.068
+Precision: 0.035
+
+[Epoch: 13/20, Iter:   94/94] batch loss: 3.343 total loss: 3.496
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 4.404
+Accuracy: 0.062
+F1 score: 0.038
+Recall: 0.062
+Precision: 0.045
+
+[Epoch: 14/20, Iter:   94/94] batch loss: 3.552 total loss: 3.473
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 3.726
+Accuracy: 0.102
+F1 score: 0.062
+Recall: 0.102
+Precision: 0.048
+
+[Epoch: 15/20, Iter:   94/94] batch loss: 2.987 total loss: 3.491
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 5.081
+Accuracy: 0.017
+F1 score: 0.010
+Recall: 0.017
+Precision: 0.012
+
+[Epoch: 16/20, Iter:   94/94] batch loss: 3.417 total loss: 3.495
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 4.034
+Accuracy: 0.057
+F1 score: 0.031
+Recall: 0.057
+Precision: 0.032
+
+[Epoch: 17/20, Iter:   94/94] batch loss: 3.046 total loss: 3.466
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 3.640
+Accuracy: 0.080
+F1 score: 0.039
+Recall: 0.080
+Precision: 0.028
+
+[Epoch: 18/20, Iter:   94/94] batch loss: 3.793 total loss: 3.407
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 3.699
+Accuracy: 0.108
+F1 score: 0.050
+Recall: 0.108
+Precision: 0.034
+
+[Epoch: 19/20, Iter:   94/94] batch loss: 3.492 total loss: 3.402
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 3.494
+Accuracy: 0.108
+F1 score: 0.084
+Recall: 0.108
+Precision: 0.109
+
+[Epoch: 20/20, Iter:   94/94] batch loss: 3.362 total loss: 3.338
+----------------------------------------------------------------------------------------------------
+Validating model...
+Avg. loss: 3.615
+Accuracy: 0.080
+F1 score: 0.064
+Recall: 0.080
+Precision: 0.064
+
+----------------------------------------------------------------------------------------------------
+Testing model...
+Avg. loss: 3.585
+Accuracy: 0.091
+F1 score: 0.053
+Recall: 0.091
+Precision: 0.040

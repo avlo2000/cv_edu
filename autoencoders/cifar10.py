@@ -4,7 +4,7 @@ from torchvision import transforms, datasets
 
 from autoencoders.big_cnn_autoencoder import BigCNNAutoencoder
 from autoencoders.pretrained_autoencoder import PretrainedAutoencoder
-from autoencoders.utils import plot_latent_space, train, try_out
+from autoencoders.utils import plot_latent_space, try_out
 
 EPOCH_COUNT = 10
 BATCH_SIZE = 128
@@ -38,5 +38,3 @@ summary(model, input_size=in_shape[1:], device=device)
 # train(model, EPOCH_COUNT, train_data_loader, device)
 try_out(model, next(iter(test_data_loader))[0], device)
 # plot_latent_space(model, test_data, device, test_data.classes)
-
-torch.linalg.tensorinv
