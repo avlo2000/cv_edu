@@ -1,4 +1,4 @@
-from torchvision import datasets, transforms
+from torchvision import datasets
 import torch
 import matplotlib.pyplot as plt
 

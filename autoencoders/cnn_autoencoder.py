@@ -19,7 +19,7 @@ class Encoder(nn.Module):
 
         self.flatten = nn.Flatten(start_dim=1)
         self.encoder_lin = nn.Sequential(
-            nn.Linear(3 * 3 * 32, 128),
+            nn.Linear(7 * 7 * 32, 128),
             nn.ReLU(True),
             nn.Linear(128, encoded_space_dim)
         )
@@ -50,12 +50,15 @@ class Decoder(nn.Module):
                                stride=2, output_padding=0),
             nn.BatchNorm2d(16),
             nn.ReLU(True),
-            nn.ConvTranspose2d(16, 8, 3, stride=2,
+            nn.ConvTranspose2d(16, 8, 4, stride=2,
                                padding=1, output_padding=1),
             nn.BatchNorm2d(8),
             nn.ReLU(True),
-            nn.ConvTranspose2d(8, in_shape[0], 3, stride=2,
-                               padding=1, output_padding=1)
+            nn.ConvTranspose2d(8, 8, 4, stride=2,
+                               padding=1, output_padding=1),
+            nn.ReLU(True),
+            nn.ConvTranspose2d(8, in_shape[0], 5, stride=2,
+                               padding=1, output_padding=1),
         )
 
     def forward(self, x):
