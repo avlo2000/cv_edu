@@ -68,6 +68,7 @@ def train(*, model, epoch_count,
     model.eval()
     eval_on_data(test_data_loader, model, device, loss_fn)
     model.train()
+    return model
 
 
 def eval_on_data(eval_data_loader, model, device, loss_fn):
@@ -82,7 +83,6 @@ def eval_on_data(eval_data_loader, model, device, loss_fn):
         y = nn.functional.one_hot(y, num_classes=num_classes).to(device, dtype=torch.float32)
 
         loss = loss_fn(y_pred, y)
-        loss.backward()
         total_loss += loss.item()
 
         all_true_preds.append(torch.argmax(y, dim=1))
