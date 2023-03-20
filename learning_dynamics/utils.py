@@ -6,6 +6,19 @@ from torch.utils import data
 from tqdm import tqdm
 
 
+def load_clsloc(path_to_file: str):
+    with open(path_to_file, 'r') as f:
+        lines = f.readlines()
+        cls_to_idx = dict()
+        id_to_cls = dict()
+
+        for line in lines:
+            uid, idx, cls = line.split()
+            cls_to_idx[cls] = int(idx)
+            id_to_cls[uid] = cls
+    return cls_to_idx, id_to_cls
+
+
 def lerp_model(model_a: nn.Sequential, model_b: nn.Sequential, weight):
     trg_model = copy.deepcopy(model_a)
     state_dict = trg_model.state_dict()
