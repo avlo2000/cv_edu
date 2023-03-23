@@ -35,3 +35,15 @@ def load_dtd(transform):
     dataset = torchvision.datasets.DTD(root="../data/dtd", transform=transform, download=True)
     train_data, test_data, val_data = data.random_split(dataset, [0.8, 0.1, 0.1])
     return train_data, test_data, val_data
+
+
+def load_imagewoof_train(transform, trg_transform=None):
+    return torchvision.datasets.ImageFolder(root="../data/imagewoof2-320/train",
+                                            transform=transform,
+                                            target_transform=trg_transform)
+
+
+def load_imagewoof_val(transform, trg_transform=None):
+    return torchvision.datasets.ImageFolder(root="../data/imagewoof2-320/val",
+                                            transform=transform,
+                                            target_transform=trg_transform)

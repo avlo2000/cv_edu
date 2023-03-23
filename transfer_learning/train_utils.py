@@ -36,7 +36,8 @@ def train_single_batch(model, epoch_count, train_data_loader, device, train_step
 
 def train(*, model, epoch_count,
           train_data_loader, val_data_loader, test_data_loader,
-          device, train_step_fn=train_step):
+          device, train_step_fn=train_step,
+          checkpoint_path=None):
     loss_fn = nn.CrossEntropyLoss()
     optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=0.002)
 
@@ -60,6 +61,10 @@ def train(*, model, epoch_count,
         print("-" * 100)
         print("Validating model...")
         model.eval()
+        if checkpoint_path is not None:
+            torch.save(model, checkpoint_path)
+            print(f"Saving model to[{checkpoint_path}]")
+
         eval_on_data(val_data_loader, model, device, loss_fn)
         model.train()
     print()

@@ -5,37 +5,30 @@ from torch.utils import data
 from torchvision.transforms import transforms
 from torchvision import models
 
-from learning_dynamics.utils import loss_drill, load_clsloc
+from learning_dynamics.utils import loss_drill, load_uid_to_idx
 import matplotlib.pyplot as plt
 
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Device: {DEVICE}")
-BATCH_SIZE = 16
+BATCH_SIZE = 10
 EPOCH_COUNT = 50
 
 
-def reduce_targets(dataset: datasets.ImageFolder, id_to_cls, cls_to_idx):
-    # model_classes = [cls.lower().replace(" ", "_") for cls in model_classes]
-    # cls_to_idx = {cls: idx for idx, cls in enumerate(model_classes)}
-    targets = []
-    for trg in dataset.targets:
+def targets_to_imagenet_targets_fn(dataset: datasets.ImageFolder, id_to_idx):
+    def transform(trg):
         uid = dataset.classes[trg]
-        cls = id_to_cls[uid].lower()
-        print(cls)
-        idx = cls_to_idx[cls]
-        targets.append(idx)
-    dataset.class_to_idx = cls_to_idx
-    dataset.classes = list(cls_to_idx.keys())
-    dataset.targets = targets
-    return dataset
+        idx = id_to_idx[uid]
+        return idx
+
+    return transform
 
 
 def main():
-    weights = models.VGG19_Weights.IMAGENET1K_V1
-    model_classes = weights.meta["categories"]
-    trained_model = models.vgg19(weights=weights).to(DEVICE)
-    stupid_model = models.vgg19().to(DEVICE)
+    weights = models.EfficientNet_V2_S_Weights.DEFAULT
+    trained_model = models.efficientnet_v2_s(weights=weights).to(DEVICE)
+    stupid_model = models.efficientnet_v2_s().to(DEVICE)
+    # over_fitted_model = torch.load('../transfer_learning/assets/ResNet18_ImageWoof.pkl')
 
     data_transforms = transforms.Compose([
         transforms.Resize([224, 224]),
@@ -45,19 +38,19 @@ def main():
         root='../data/imagewoof2-320/val',
         transform=data_transforms
     )
-    cls_to_idx, id_to_cls = load_clsloc('../data/imagewoof2-320/map_clsloc.txt')
-    dataset = reduce_targets(dataset, id_to_cls, cls_to_idx)
-
-    sample, _ = torch.utils.data.random_split(dataset, lengths=[50, len(dataset)-50])
+    uid_to_idx = load_uid_to_idx('../data/imagewoof2-320/imagenet_class_index.json')
+    trg_transform = targets_to_imagenet_targets_fn(dataset, uid_to_idx)
+    dataset.target_transform = trg_transform
+    sample, _ = torch.utils.data.random_split(dataset, lengths=[300, len(dataset)-300])
     test_data_loader = data.DataLoader(sample, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
 
     weights, losses = loss_drill(trained_model, stupid_model, nn.CrossEntropyLoss(),
-                                 test_data_loader, ticks_count=70, device=DEVICE)
+                                 test_data_loader, ticks_count=100, device=DEVICE)
 
     plt.title("Loss drill before train and after")
     plt.xlabel("ModelA to ModelB lerp weight")
     plt.ylabel("Total cross entropy loss")
-    plt.plot(weights, losses, label=f"Loss drill num")
+    plt.plot(weights, losses, label=f"Loss drill")
     plt.legend()
     plt.show()
 

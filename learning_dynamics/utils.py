@@ -3,20 +3,15 @@ import copy
 import torch
 from torch import nn
 from torch.utils import data
+import json
 from tqdm import tqdm
 
 
-def load_clsloc(path_to_file: str):
+def load_uid_to_idx(path_to_file):
     with open(path_to_file, 'r') as f:
-        lines = f.readlines()
-        cls_to_idx = dict()
-        id_to_cls = dict()
-
-        for line in lines:
-            uid, idx, cls = line.split()
-            cls_to_idx[cls] = int(idx)
-            id_to_cls[uid] = cls
-    return cls_to_idx, id_to_cls
+        idx_to_uid_class = json.load(f)
+    uid_to_idx = {uid: int(idx) for idx, (uid, _) in idx_to_uid_class.items()}
+    return uid_to_idx
 
 
 def lerp_model(model_a: nn.Sequential, model_b: nn.Sequential, weight):
