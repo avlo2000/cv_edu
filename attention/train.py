@@ -4,12 +4,12 @@ from torch.utils import data
 import train_utils
 import matplotlib.pyplot as plt
 import oscillation_dataset
-import attention
+from layer import Attention
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Device: {DEVICE}")
 BATCH_SIZE = 64
-EPOCH_COUNT = 200
+EPOCH_COUNT = 5
 
 
 def main():
@@ -21,15 +21,7 @@ def main():
     train_data_loader = data.DataLoader(train_data, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
     test_data_loader = data.DataLoader(test_data, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
 
-    model = nn.Sequential(
-        nn.Linear(dataset.x_size(), 1024),
-        nn.LeakyReLU(inplace=True),
-        nn.Linear(1024, 1024),
-        nn.LeakyReLU(inplace=True),
-        nn.Linear(1024, 1024),
-        nn.LeakyReLU(inplace=True),
-        nn.Linear(1024, dataset.y_size()),
-    ).to(DEVICE)
+    model = Attention(dataset.x_shape[1], dataset.y_size[1]).to(DEVICE)
     model = train_utils.train(
                         model=model,
                         epoch_count=EPOCH_COUNT,

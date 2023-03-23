@@ -1,6 +1,7 @@
 import sys
 
 import torch
+from matplotlib import pyplot as plt
 from torch import nn, optim
 
 
@@ -12,7 +13,7 @@ def train_step(model, sample, device, optimizer, loss_fn):
     y_pred = model(x)
 
     optimizer.zero_grad()
-    loss = loss_fn(y_pred, y)
+    loss = loss_fn(y_pred[:, :, :y.size(2)], y)
     loss.backward()
     optimizer.step()
     return loss.item()
@@ -25,8 +26,6 @@ def train(*, model, epoch_count,
     loss_fn = nn.L1Loss(reduction='sum')
     optimizer = optim.NAdam(filter(lambda p: p.requires_grad, model.parameters()), lr=0.001)
 
-    model.eval()
-    eval_on_data(test_data_loader, model, device, loss_fn)
     model.train()
 
     for epoch in range(epoch_count):
@@ -63,11 +62,12 @@ def train(*, model, epoch_count,
 def eval_on_data(eval_data_loader, model, device, loss_fn):
     total_loss = 0.0
 
-    for x, y in eval_data_loader:
+    for i, (x, y) in enumerate(eval_data_loader):
         x = x.to(device)
         y = y.to(device)
         y_pred = model(x)
 
-        loss = loss_fn(y_pred, y).mean(dim=0)
-        total_loss += loss.item()
+        loss = loss_fn(y_pred[:, :, :y.size(2)], y)
+        total_loss += loss
     print(f"Avg. loss: {total_loss / len(eval_data_loader):.3f}")
+
