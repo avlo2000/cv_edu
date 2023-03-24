@@ -30,7 +30,8 @@ class Attention(nn.Module):
         K = self.Wk @ x
 
         scores = Q @ torch.transpose(K, 2, 1)
-        return scores
+        normed_scores = torch.softmax(scores / math.sqrt(self.dq), dim=1)
+        return normed_scores
 
 
 model = nn.Sequential(

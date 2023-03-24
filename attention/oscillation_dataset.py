@@ -52,20 +52,20 @@ class OscillationDataset(torch.utils.data.Dataset):
         return torch.Size((self.sep, self.phase_count))
 
     @property
-    def y_size(self):
-        return torch.Size((self.samples.size(1) - self.sep, self.phase_count))
+    def y_shape(self):
+        return torch.Size((self.samples.size(2) - self.sep, self.phase_count))
 
     @classmethod
     def default(cls, size, seq_len):
         time = torch.linspace(0, math.pi, seq_len)
-        phases = torch.linspace(0, math.pi/8, 26)
+        phases = torch.linspace(0, math.pi/6, 12)
         xy_sep = 0.8
         dataset = cls(size, time, phases, xy_sep,
                       1.0, 0.01,
                       30.0, 5.0,
                       1.0, 0.3,
                       0.0, 0.001)
-        return dataset
+        return dataset, time, phases
 
 
 if __name__ == '__main__':
@@ -73,9 +73,8 @@ if __name__ == '__main__':
         import matplotlib.pyplot as plt
         dataset_size = 10
         seq_len = 400
-        time = torch.linspace(0, math.pi, seq_len)
         xy_sep = 0.8
-        dataset = OscillationDataset.default(dataset_size, seq_len)
+        dataset, time, _ = OscillationDataset.default(dataset_size, seq_len)
 
         sep = int(seq_len * xy_sep)
         for i in range(dataset_size):
