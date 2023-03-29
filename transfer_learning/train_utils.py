@@ -37,14 +37,12 @@ def train_single_batch(model, epoch_count, train_data_loader, device, train_step
 def train(*, model, epoch_count,
           train_data_loader, val_data_loader, test_data_loader,
           device, train_step_fn=train_step,
-          checkpoint_path=None):
+          checkpoint_path):
     loss_fn = nn.CrossEntropyLoss()
     optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=0.002)
 
-    model.eval()
-    eval_on_data(test_data_loader, model, device, loss_fn)
     model.train()
-
+    best_accuracy = 0.0
     for epoch in range(epoch_count):
         print()
         total_loss = 0
@@ -61,11 +59,13 @@ def train(*, model, epoch_count,
         print("-" * 100)
         print("Validating model...")
         model.eval()
-        if checkpoint_path is not None:
-            torch.save(model, checkpoint_path)
+        accuracy = eval_on_data(val_data_loader, model, device, loss_fn)
+        if accuracy >= best_accuracy:
+            best_accuracy = accuracy
+            print(f"Received better accuracy. Current best one is [{accuracy:.3f}]")
             print(f"Saving model to[{checkpoint_path}]")
+            torch.save(model, checkpoint_path)
 
-        eval_on_data(val_data_loader, model, device, loss_fn)
         model.train()
     print()
     print("-" * 100)
@@ -99,8 +99,11 @@ def eval_on_data(eval_data_loader, model, device, loss_fn):
     f1_metric = F1Score(num_classes=num_classes, task="multiclass", average='weighted').to(device)
     recall_metric = Recall(num_classes=num_classes, task="multiclass", average='weighted').to(device)
     precision_metric = Precision(num_classes=num_classes, task="multiclass", average='weighted').to(device)
+
+    accuracy = accuracy_metric(all_preds, all_true_preds)
     print(f"Avg. loss: {total_loss / len(eval_data_loader):.3f}")
-    print(f"Accuracy: {accuracy_metric(all_preds, all_true_preds):.3f}")
+    print(f"Accuracy: {accuracy:.3f}")
     print(f"F1 score: {f1_metric(all_preds, all_true_preds):.3f}")
     print(f"Recall: {recall_metric(all_preds, all_true_preds):.3f}")
     print(f"Precision: {precision_metric(all_preds, all_true_preds):.3f}")
+    return accuracy

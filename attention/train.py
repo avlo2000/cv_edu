@@ -39,7 +39,17 @@ def main():
 
     model = Attention(dataset.x_shape[1], dataset.y_shape[1]).to(DEVICE)
     # model = RNN(dataset.x_shape[1], dataset.y_shape[1]).to(DEVICE)
-
+    for series, _ in test_data:
+        x = torch.unsqueeze(series, dim=0).to(DEVICE)
+        y = torch.squeeze(model(x))
+        sep = dataset.x_shape[0]
+        y_size = dataset.y_shape[0]
+        for ph in range(dataset.phase_count,):
+            plt.subplot(2, 1, 1)
+            plt.plot(time[:sep], series[ph])
+            plt.plot(time[sep:], y[ph, :y_size].cpu().detach(), label=f"Phase {ph}")
+        plt.legend()
+        plt.show()
     print(f"Params count: {sum(p.nelement() for p in model.parameters())}")
     model = train_utils.train(
                         model=model,
@@ -58,9 +68,6 @@ def main():
             plt.subplot(2, 1, 1)
             plt.plot(time[:sep], series[ph])
             plt.plot(time[sep:], y[ph, :y_size].cpu().detach(), label=f"Phase {ph}")
-        # plt.subplot(2, 1, 2)
-        # scores = torch.squeeze(model.scores(x)).cpu().detach()
-        # sns.heatmap(scores, annot=True, cmap="Blues", fmt='.1g')
         plt.legend()
         plt.show()
 

@@ -20,14 +20,14 @@ def targets_to_imagenet_targets_fn(dataset: datasets.ImageFolder, id_to_idx):
     return transform_fn
 
 
-EPOCH_COUNT = 5
+EPOCH_COUNT = 10
 BATCH_SIZE = 16
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 print(f"Device: {device}")
 torch.cuda.empty_cache()
 
-weights = models.EfficientNet_V2_S_Weights.DEFAULT
-pretrained_model = models.efficientnet_v2_s(weights=weights).to(device)
+weights = models.EfficientNet_B0_Weights.DEFAULT
+pretrained_model = models.efficientnet_b0(weights=weights).to(device)
 model_classes = weights.meta["categories"]
 
 transform = transforms.Compose([
@@ -55,6 +55,6 @@ model = train_utils.train(
     test_data_loader=val_data_loader,
     val_data_loader=val_data_loader,
     device=device,
-    checkpoint_path='./assets/EfficientNet_V2_S_ImageWoof.pkl'
+    checkpoint_path='./assets/EfficientNet_B0_ImageWoof.pkl'
 )
 

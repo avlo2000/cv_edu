@@ -2,8 +2,6 @@ import numpy as np
 import tqdm
 
 import cv2 as cv
-import glob
-
 import matplotlib.pyplot as plt
 
 img = cv.imread('data/helmets/train/Helmet/00799_jpg.rf.a1553100105d6ae289921a753924350c.jpg')
