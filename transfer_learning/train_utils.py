@@ -37,7 +37,7 @@ def train_single_batch(model, epoch_count, train_data_loader, device, train_step
 def train(*, model, epoch_count,
           train_data_loader, val_data_loader, test_data_loader,
           device, train_step_fn=train_step,
-          checkpoint_path):
+          checkpoint_path=None):
     loss_fn = nn.CrossEntropyLoss()
     optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=0.002)
 
@@ -60,7 +60,7 @@ def train(*, model, epoch_count,
         print("Validating model...")
         model.eval()
         accuracy = eval_on_data(val_data_loader, model, device, loss_fn)
-        if accuracy >= best_accuracy:
+        if accuracy >= best_accuracy and checkpoint_path is not None:
             best_accuracy = accuracy
             print(f"Received better accuracy. Current best one is [{accuracy:.3f}]")
             print(f"Saving model to[{checkpoint_path}]")

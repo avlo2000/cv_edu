@@ -15,8 +15,8 @@ import tqdm
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Device: {DEVICE}")
-BATCH_SIZE = 64
-EPOCH_COUNT = 50
+BATCH_SIZE = 32
+EPOCH_COUNT = 10
 
 
 def main():
@@ -27,16 +27,19 @@ def main():
         download=True,
         transform=data_transforms
     )
-    train_data, test_data = data.random_split(dataset, [0.3, 0.7])
+    train_data, test_data = data.random_split(dataset, [0.9, 0.1])
+    over_train_data, _ = data.random_split(train_data, [0.01, 0.99])
+    print(f"Len of overfit data: {len(over_train_data)}")
+
     train_data_loader = data.DataLoader(train_data, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
+    over_train_data_loader = data.DataLoader(over_train_data, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
     test_data_loader = data.DataLoader(test_data, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
     in_shape: torch.Size = dataset[0][0].shape
 
-    trained_model = torch.load('assets/mnist_cnn.pkl').to(DEVICE)
-    overfited_model = torch.load('assets/overfited_mnist_cnn.pkl').to(DEVICE)
+    trained_model = torch.load('assets/trained_mnist_cnn.pkl').to(DEVICE)
 
-    # overfited_model = create_model_cnn(in_shape).to(DEVICE)
-    # overfited_model = train_utils.train(
+    # trained_model = create_model_cnn(in_shape).to(DEVICE)
+    # trained_model = train_utils.train(
     #                     model=trained_model,
     #                     epoch_count=EPOCH_COUNT,
     #                     train_data_loader=train_data_loader,
@@ -44,7 +47,19 @@ def main():
     #                     test_data_loader=test_data_loader,
     #                     device=DEVICE
     #                 )
-    # torch.save(trained_model, 'assets/overfited_mnist_cnn.pkl')
+    # torch.save(trained_model, 'assets/trained_mnist_cnn.pkl')
+
+    # overfited_model = torch.load('assets/overfited_mnist_cnn.pkl').to(DEVICE)
+    overfited_model = create_model_cnn(in_shape).to(DEVICE)
+    overfited_model = train_utils.train(
+                        model=overfited_model,
+                        epoch_count=100,
+                        train_data_loader=over_train_data_loader,
+                        val_data_loader=test_data_loader,
+                        test_data_loader=test_data_loader,
+                        device=DEVICE
+                    )
+    torch.save(overfited_model, 'assets/overfited_mnist_cnn.pkl')
 
     # stupid_model = create_model_cnn(in_shape).to(DEVICE)
 

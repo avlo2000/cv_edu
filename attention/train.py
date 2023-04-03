@@ -44,7 +44,7 @@ def main():
         y = torch.squeeze(model(x))
         sep = dataset.x_shape[0]
         y_size = dataset.y_shape[0]
-        for ph in range(dataset.phase_count,):
+        for ph in range(dataset.phase_count):
             plt.subplot(2, 1, 1)
             plt.plot(time[:sep], series[ph])
             plt.plot(time[sep:], y[ph, :y_size].cpu().detach(), label=f"Phase {ph}")
