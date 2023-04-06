@@ -11,7 +11,7 @@ from learning_dynamics.models import create_model_cnn
 from learning_dynamics.utils import loss_drill
 from transfer_learning import train_utils
 import matplotlib.pyplot as plt
-import tqdm
+
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Device: {DEVICE}")
@@ -52,13 +52,13 @@ def main():
     # overfited_model = torch.load('assets/overfited_mnist_cnn.pkl').to(DEVICE)
     overfited_model = create_model_cnn(in_shape).to(DEVICE)
     overfited_model = train_utils.train(
-                        model=overfited_model,
-                        epoch_count=100,
-                        train_data_loader=over_train_data_loader,
-                        val_data_loader=test_data_loader,
-                        test_data_loader=test_data_loader,
-                        device=DEVICE
-                    )
+        model=overfited_model,
+        epoch_count=100,
+        train_data_loader=over_train_data_loader,
+        val_data_loader=test_data_loader,
+        test_data_loader=test_data_loader,
+        device=DEVICE
+    )
     torch.save(overfited_model, 'assets/overfited_mnist_cnn.pkl')
 
     # stupid_model = create_model_cnn(in_shape).to(DEVICE)
