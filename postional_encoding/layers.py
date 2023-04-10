@@ -11,13 +11,12 @@ class PositionalEncoding(nn.Module):
 
         position = torch.arange(max_len).unsqueeze(1)
         div_term = torch.exp(torch.arange(0, d_model, 2) * (-math.log(1000.0) / d_model))
-        pe = torch.zeros(max_len, 1, d_model)
-        pe[:, 0, 0::2] = torch.sin(position * div_term)
-        pe[:, 0, 1::2] = torch.cos(position * div_term)
-        self.register_buffer('pe', pe)
+        self.mat = torch.zeros(max_len, 1, d_model)
+        self.mat[:, 0, 0::2] = torch.sin(position * div_term)
+        self.mat[:, 0, 1::2] = torch.cos(position * div_term)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = x + self.pe[:x.size(0)]
+        x = x + self.mat[:x.size(0)]
         return x
 
 
@@ -28,7 +27,7 @@ if __name__ == '__main__':
         import numpy as np
 
         pe = PositionalEncoding(256, 512)
-        mat = np.squeeze(pe.pe.numpy())
+        mat = np.squeeze(pe.mat.numpy())
         plt.subplot(311)
         sns.heatmap(mat)
         plt.subplot(312)

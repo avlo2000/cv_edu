@@ -10,7 +10,7 @@ from layer import Attention
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Device: {DEVICE}")
 BATCH_SIZE = 32
-EPOCH_COUNT = 5
+EPOCH_COUNT = 2
 
 
 class RNN(nn.Module):

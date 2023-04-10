@@ -34,6 +34,7 @@ class Attention(nn.Module):
         return normed_scores
 
 
-model = nn.Sequential(
-    Attention(100, 64),
-)
+if __name__ == '__main__':
+    model = nn.Sequential(
+        Attention(100, 64),
+    )
