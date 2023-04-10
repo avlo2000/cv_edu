@@ -1,23 +1,20 @@
 import math
-from math import exp
 import torch
 from torch import optim
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-x_dim = 80
-samples_dim = 1000
+from postional_encoding.utils import cross_sample_correlations_goal, cross_feature_correlations_goal
 
-A = torch.empty(samples_dim, samples_dim)
-for i in range(samples_dim):
-    for j in range(samples_dim):
-        A[i, j] = exp(-abs(i - j) / 100)
-A[A < 0.000] = 0.0
-print(A)
+x_dim = 512
+samples_dim = 2000
+
+A = cross_sample_correlations_goal(samples_dim, 100)
+B = cross_feature_correlations_goal(x_dim)
 
 
 def residual(X):
-    return torch.norm(X @ X.T - A)
+    return torch.norm(X @ X.T - A)# + 0.01 * torch.norm(X.T @ X - B)
 
 
 def pe_approx():
@@ -31,7 +28,8 @@ def pe_approx():
 
 
 def optimize():
-    X = pe_approx()#samples_dim, x_dim, requires_grad=True)
+    #X = pe_approx()
+    X = torch.eye(samples_dim, x_dim, requires_grad=True)
     iters = 100
 
     opt = optim.Rprop([X], 0.1)
@@ -41,17 +39,17 @@ def optimize():
         opt.step()
         opt.zero_grad()
         print(loss)
-    print(X)
-    print(X @ X.T)
     return X
 
 
 X = optimize().detach().numpy()
 
-plt.subplot(311)
+plt.subplot(411)
 sns.heatmap(A)
-plt.subplot(312)
+plt.subplot(412)
 sns.heatmap(X @ X.T)
-plt.subplot(313)
+plt.subplot(413)
+sns.heatmap(X.T @ X)
+plt.subplot(414)
 sns.heatmap(X.T)
 plt.show()
