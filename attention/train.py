@@ -2,7 +2,8 @@ import torch
 from torch import nn
 from torch.utils import data
 import train_utils
-import seaborn as sns
+from postional_encoding.vanilla_encoding import PositionalEncoding
+from postional_encoding.tuned_encoding import TunedEncoding
 import matplotlib.pyplot as plt
 import oscillation_dataset
 from layer import Attention
@@ -10,7 +11,7 @@ from layer import Attention
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Device: {DEVICE}")
 BATCH_SIZE = 32
-EPOCH_COUNT = 2
+EPOCH_COUNT = 5
 
 
 class RNN(nn.Module):
@@ -37,19 +38,12 @@ def main():
     train_data_loader = data.DataLoader(train_data, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
     test_data_loader = data.DataLoader(test_data, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
 
-    model = Attention(dataset.x_shape[1], dataset.y_shape[1]).to(DEVICE)
-    # model = RNN(dataset.x_shape[1], dataset.y_shape[1]).to(DEVICE)
-    for series, _ in test_data:
-        x = torch.unsqueeze(series, dim=0).to(DEVICE)
-        y = torch.squeeze(model(x))
-        sep = dataset.x_shape[0]
-        y_size = dataset.y_shape[0]
-        for ph in range(dataset.phase_count):
-            plt.subplot(2, 1, 1)
-            plt.plot(time[:sep], series[ph])
-            plt.plot(time[sep:], y[ph, :y_size].cpu().detach(), label=f"Phase {ph}")
-        plt.legend()
-        plt.show()
+    # model = nn.Sequential(
+    #     # TunedEncoding(dataset.x_shape[1], 500),
+    #     Attention(dataset.x_shape[0], dataset.y_shape[0])
+    # ).to(DEVICE)
+    model = RNN(dataset.x_shape[0], dataset.y_shape[0]).to(DEVICE)
+
     print(f"Params count: {sum(p.nelement() for p in model.parameters())}")
     model = train_utils.train(
                         model=model,
@@ -63,11 +57,10 @@ def main():
         x = torch.unsqueeze(series, dim=0).to(DEVICE)
         y = torch.squeeze(model(x))
         sep = dataset.x_shape[0]
-        y_size = dataset.y_shape[0]
-        for ph in range(dataset.phase_count,):
+        for ph in range(dataset.c_count):
             plt.subplot(2, 1, 1)
-            plt.plot(time[:sep], series[ph])
-            plt.plot(time[sep:], y[ph, :y_size].cpu().detach(), label=f"Phase {ph}")
+            plt.plot(time[:sep], series[:, ph])
+            plt.plot(time[sep:], y[:, ph].cpu().detach(), label=f"Phase {ph}")
         plt.legend()
         plt.show()
 

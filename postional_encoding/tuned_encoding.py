@@ -13,11 +13,12 @@ class TunedEncoding(nn.Module):
         self.d_model = d_model
         self.max_len = max_len
         mat = self.__optimize_positional_correlations()
+        mat = torch.unsqueeze(mat, dim=0)
 
         self.register_buffer('mat', mat)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = x + self.mat[:x.size(0)]
+        x = x + self.mat[:, :x.size(1), :] / 100.0
         return x
 
     def __optimize_positional_correlations(self):

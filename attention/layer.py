@@ -23,7 +23,8 @@ class Attention(nn.Module):
 
         scores = Q @ torch.transpose(K, 2, 1)
         normed_scores = torch.softmax(scores / math.sqrt(self.dq), dim=1)
-        return normed_scores @ V
+        attention = normed_scores @ V
+        return attention
 
     def scores(self, x):
         Q = self.Wq @ x
