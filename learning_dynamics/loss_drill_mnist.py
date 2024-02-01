@@ -1,6 +1,3 @@
-import copy
-from collections import OrderedDict
-
 from torchvision import datasets
 import torch
 from torch import nn
