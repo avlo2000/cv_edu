@@ -33,8 +33,8 @@ print(S_a)
 
 
 def residual(V):
-    subject = torch.norm(V @ S_a.T @ S_a @ V.T - B)
-    cond = torch.norm(V @ V.T - torch.eye(samples_dim))
+    subject = torch.norm(V @ S_a.T @ S_a @ V.timeline - B)
+    cond = torch.norm(V @ V.timeline - torch.eye(samples_dim))
     return subject + 5 * cond
 
 

@@ -14,7 +14,7 @@ B = cross_feature_correlations_goal(x_dim)
 
 
 def residual(X):
-    return torch.norm(X @ X.T - A)# + 0.01 * torch.norm(X.T @ X - B)
+    return torch.norm(X @ X.timeline - A)# + 0.01 * torch.norm(X.T @ X - B)
 
 
 def pe_approx():
@@ -47,9 +47,9 @@ X = optimize().detach().numpy()
 plt.subplot(411)
 sns.heatmap(A)
 plt.subplot(412)
-sns.heatmap(X @ X.T)
+sns.heatmap(X @ X.timeline)
 plt.subplot(413)
-sns.heatmap(X.T @ X)
+sns.heatmap(X.timeline @ X)
 plt.subplot(414)
-sns.heatmap(X.T)
+sns.heatmap(X.timeline)
 plt.show()

@@ -16,6 +16,6 @@ eig_b, V_b = torch.linalg.eig(A)
 S_a = torch.diag(torch.sqrt(eig_a))
 S_b = torch.diag(torch.sqrt(eig_b))
 
-X = (V_a @ S_a @ V_b.T @ S_b).real
+X = (V_a @ S_a @ V_b.timeline @ S_b).real
 print(B)
-print(X @ X.T)
+print(X @ X.timeline)

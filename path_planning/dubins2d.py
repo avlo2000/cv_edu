@@ -3,7 +3,7 @@ import math
 import numpy as np
 from enum import Enum
 
-from dubins_planning.utils import heading_to_standard
+from path_planning.utils import heading_to_standard
 
 
 class _SegmentType(Enum):

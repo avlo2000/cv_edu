@@ -1,6 +1,6 @@
 import numpy as np
 
-from dubins_planning.dubins2d import DubinsPath2d, Waypoint2d, calc_dubins_path
+from path_planning.dubins2d import DubinsPath2d, Waypoint2d, calc_dubins_path
 
 
 class Waypoint3d:

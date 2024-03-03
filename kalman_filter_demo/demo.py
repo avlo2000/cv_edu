@@ -36,14 +36,6 @@ def main():
     )
     kf.reset(x)
 
-    kf_cv = cv2.KalmanFilter()
-    kf_cv.transitionMatrix = st.a_mat
-    kf_cv.controlMatrix = st.b_mat
-    kf_cv.measurementMatrix = st.c_mat
-    kf_cv.processNoiseCov = process_cov
-    kf_cv.measurementNoiseCov = measurement_cov
-    kf_cv.statePre = x
-
     for _ in range(n_iters):
         x_next, y, x_next_noisy, y_noisy = rnd_dyn.random_dynamics(
             st,
@@ -55,13 +47,9 @@ def main():
         kf.time_update(u)
         kf.measurement_update(y_noisy)
 
-        kf_cv.predict(u)
-        kf_cv.correct(y_noisy)
-
         x_kalman_trj.append(kf.get_prediction())
         x_trj.append(x_next)
         x_noisy_trj.append(x_next_noisy)
-        x_kalman_cv_trj.append(kf_cv.statePost)
 
     plt.plot(x_trj, c='green', label='real')
     plt.plot(x_noisy_trj, c='red', label='measured')

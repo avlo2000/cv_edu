@@ -39,7 +39,7 @@ class TunedEncoding(nn.Module):
 
     @staticmethod
     def __residual_corr(mat, corr_gaol):
-        return torch.norm(mat @ mat.T - corr_gaol) + 0.1 * torch.norm(mat.T @ mat)
+        return torch.norm(mat @ mat.timeline - corr_gaol) + 0.1 * torch.norm(mat.timeline @ mat)
 
 
 if __name__ == '__main__':

@@ -27,7 +27,7 @@ def random_st(nx: int, nu: int, ny: int) -> StateTransition:
 
 def rand_positive_semidefinite(n: int, scale: float) -> np.ndarray:
     mat = np.random.rand(n, n) * scale
-    mat = mat @ mat.T
+    mat = mat @ mat.timeline
     return mat
 
 
