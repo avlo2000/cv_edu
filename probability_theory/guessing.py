@@ -30,8 +30,8 @@ def go(left: int, right: int, space: int, guess: np.ndarray, prev_score: int, d:
     n = right - left
     true = (n + k) // 2
     false = n - true
-    to_print = f"'t': {false} | {to_print}"
-    to_print = f"'f': {true} | {to_print}"
+    to_print = f"'t': {true} == {np.sum(guess[left:right])} | {to_print}"
+    to_print = f"'f': {false} | {to_print}"
     print(to_print, end='')
     mid = (right - left + 1) // 2
 
