@@ -16,6 +16,7 @@ C.orient_axis(B, beta, B.y)
 
 v = a*A.x + b*A.y + c*B.x + d*B.y + e*C.x + f*C.y
 
-pprint(v.dot(A.x).diff(alpha))
-pprint(v.diff(alpha, A))
-pprint(v.dot(A.y).diff(alpha))
+dvdeBx = v.dot(B.x).diff(e)
+dvdeBy = v.dot(B.y).diff(e)
+dvdeBz = v.dot(B.z).diff(e)
+pprint(dvdeBx*B.x + dvdeBy*B.y + dvdeBz*B.z)
