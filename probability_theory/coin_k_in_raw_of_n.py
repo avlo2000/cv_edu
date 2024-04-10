@@ -1,7 +1,7 @@
 import numpy as np
 
-m = 3
-n = 5
+m = 6
+n = 500
 
 p = 0.5
 

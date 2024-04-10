@@ -1,18 +1,18 @@
 import cv2
 import numpy as np
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(5)
 
-# cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-# cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 640)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 640)
 
 # cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
 # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2592)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1944)
-cap.set(cv2.CAP_PROP_BRIGHTNESS, 50)
-cap.set(cv2.CAP_PROP_EXPOSURE, 0.1)
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2592)
+# cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1944)
+# cap.set(cv2.CAP_PROP_BRIGHTNESS, 50)
+# cap.set(cv2.CAP_PROP_EXPOSURE, 0.1)
 
 roi = None
 

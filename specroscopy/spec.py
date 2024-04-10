@@ -67,7 +67,7 @@ imdata = 'iVBORw0KGgoAAAANSUhEUgAAASwAAACSCAYAAAD/yvfEAAAUqHpUWHRSYXcgcHJvZmlsZS
 class App:
     DEFAULT_CALIBRATION = ((263, 450), (531, 652))
 
-    def __init__(self, args, window, window_title, video_source=0):
+    def __init__(self, args, window, window_title, video_source=4):
         self.window = window
 
         self.window.geometry("660x570")
