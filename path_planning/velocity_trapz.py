@@ -63,8 +63,8 @@ class RampTrj:
         return np.array(xs)
 
 
-def trapz_time(x0, x1, vel0, vel1, vel_max, acc):
-    vel_max_hat = np.sqrt(acc * (x1 - x0) + 0.5 * vel0 ** 2 + 0.5 * vel1 ** 2)
+def trapz_time(dist, vel0, vel1, vel_max, acc):
+    vel_max_hat = np.sqrt(acc * dist + 0.5 * vel0 ** 2 + 0.5 * vel1 ** 2)
     print(f"vel_max_hat: {vel_max_hat}")
     if vel_max > vel_max_hat:
         dt0 = abs(vel_max_hat - vel0) / acc
@@ -75,7 +75,7 @@ def trapz_time(x0, x1, vel0, vel1, vel_max, acc):
     dt1 = (vel_max - vel1) / acc
     dx0 = vel0 * dt0 + 0.5 * acc * dt0 ** 2
     dx1 = vel_max * dt1 - 0.5 * acc * dt1 ** 2
-    t1 = (x1 - x0 + vel_max * dt0 - dx0 - dx1) / vel_max
+    t1 = (dist + vel_max * dt0 - dx0 - dx1) / vel_max
     return t1 + dt1
 
 
