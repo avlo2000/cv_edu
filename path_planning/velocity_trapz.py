@@ -65,7 +65,6 @@ class RampTrj:
 
 def trapz_time(dist, vel0, vel1, vel_max, acc):
     vel_max_hat = np.sqrt(acc * dist + 0.5 * vel0 ** 2 + 0.5 * vel1 ** 2)
-    print(f"vel_max_hat: {vel_max_hat}")
     if vel_max > vel_max_hat:
         dt0 = abs(vel_max_hat - vel0) / acc
         dt1 = abs(vel_max_hat - vel1) / acc
@@ -88,7 +87,7 @@ def main():
     t_dur = 4 
     trj = RampTrj(x0, vel0, vel1, vel_max, acc, t_dur)
     time = np.linspace(0.0, t_dur, 250)
-    print(trapz_time(x0, trj.last_x(), vel0, vel1, vel_max, acc))
+    print(trapz_time(trj.last_x() - x0, vel0, vel1, vel_max, acc))
     plt.plot(time, trj.sample(time))
     plt.show()
 

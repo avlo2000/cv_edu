@@ -28,6 +28,8 @@ def plan_angular(poses: List[float], max_vel: float, acc: float):
         for vel_next in vels_next:
             dur = velocity_trapz.trapz_time(abs(angle_diff(poses[idx], poses[idx + 1])), vel, vel_next, max_vel, acc)
             durations.append(dur + plan_rec(idx + 1, vel_next))
+            if idx + 2 == len(poses):
+                print(durations[-1])
 
         return min(*durations)
 
