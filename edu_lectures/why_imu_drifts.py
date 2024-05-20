@@ -3,7 +3,7 @@ import numpy as np
 
 
 def main():
-    n_samples = 50_000
+    n_samples = 500_000
     time = np.linspace(0.0, 100.0, n_samples)
     x = np.cos(time)
     measurement_noise = np.random.normal(0.0, scale=0.1, size=n_samples)
