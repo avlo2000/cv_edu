@@ -22,6 +22,9 @@ class QLearning:
         self._action = action
         return action
 
+    def set_action(self, action: np.ndarray):
+        self._action = action
+
     def learn(self, current_state: np.ndarray, next_state: np.ndarray, reward: float):
         self.q_table[tuple(current_state)][tuple(self._action)] += \
             self.learning_rate * \
@@ -38,6 +41,10 @@ class QLearningQuant:
         self._n_state = np.array([self._state_quant.num_bins] * self._state_quant.dim)
         self._n_actions = np.array([self._action_quant.num_bins] * self._action_quant.dim)
         self.learning = QLearning(self._n_state, self._n_actions)
+
+    def set_action(self, action: np.ndarray):
+        act_q = self._action_quant.quantize(action)
+        self.learning.set_action(act_q)
 
     def act(self, current_state: np.ndarray):
         curr_state_q = self._state_quant.quantize(current_state)

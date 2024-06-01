@@ -5,7 +5,7 @@ import tqdm
 from matplotlib import pyplot as plt
 from control_theory.falling_wings import falling_wing_fn
 from control_theory.pid import PIDControl
-from control_theory.q_learning import QLearning, QLearningQuant
+from control_theory.q_learning import QLearningQuant
 from control_theory.quantizer import Quantizer
 
 np.random.seed(42)
@@ -95,11 +95,12 @@ def main():
     env = FallingWingsEnv()
     env.reset()
     episodes = 5000
-    # pid = PIDControl()
+    pre_episodes = 500
+    pid = PIDControl()
     fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
-    show_episodes_period = 400
+    show_episodes_period = 20
     state_quantizer = Quantizer(
-        np.array([-40, -40, 0.0]), np.array([+40, +40, 500]), 30
+        np.array([-40, -40, 0.0, -20, -20]), np.array([+40, +40, 500, +20, +20]), 10
     )
     action_quantizer = Quantizer(
         np.array([-env.max_angle, -env.max_angle]), np.array([+env.max_angle, +env.max_angle]), 20
@@ -107,14 +108,30 @@ def main():
     q_learning = QLearningQuant(state_quantizer, action_quantizer)
     q_learning.learning.exploration_prob = 0.3
 
+    for i in tqdm.tqdm(range(pre_episodes)):
+        episode_end = False
+        current_state = env.state
+        while not episode_end:
+            u = pid.control(env.state) / env.state[2]
+            reward, episode_end = env.step(u)
+            next_state = env.state
+            q_learning.set_action(u)
+            q_learning.learn(current_state[:-1], next_state[:-1], reward)
+        env.plot(ax)
+        env.reset()
+        if (i + 1) % show_episodes_period == 0:
+            plt.title(f"Episodes: {i + 1}")
+            plt.legend()
+            plt.savefig(f"results/pre_episode{(i + 1) // show_episodes_period}.png")
+            fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
+
     for i in tqdm.tqdm(range(episodes)):
         episode_end = False
-        current_state = env.state[:3]
+        current_state = env.state[:-1]
         while not episode_end:
-            # u = pid.control(env.state) / env.state[2]
             u = q_learning.act(current_state=current_state)
             reward, episode_end = env.step(u)
-            next_state = env.state[:3]
+            next_state = env.state[:-1]
             q_learning.learn(current_state, next_state, reward)
         env.plot(ax)
         env.reset()
