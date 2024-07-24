@@ -4,6 +4,8 @@ import control as ct
 import numpy as np
 from matplotlib import pyplot as plt
 
+from control_theory.pid import PIDControl
+
 
 def falling_wings_observe(_: float, x: np.ndarray, *args, **kwargs):
     c_mat = np.array([
@@ -55,9 +57,7 @@ def main():
         params=params
     )
 
-    u = np.array([15, 15])
-    u = np.deg2rad(u)
-    x0 = np.array([0.0, 0.0, 0.0, 20.0, 20.0, 500.0])
+    x0 = np.array([0.0, 0.0, 0.0, 20.0, 3.0, 500.0])
     x = x0.copy()
     x_linear = x0.copy()
     dt = 0.05
@@ -65,27 +65,16 @@ def main():
 
     trj = []
     trj_linear = []
+    pid = PIDControl()
+    pid.p = 25
+
     while x[-1] >= 0.0:
+        error = np.array([x[3], x[4]]) / (x[2]**2 + 0.01)
+        u = -pid.control(error)
         linear_sys = falling_wing_sys.linearize(x0=x, u0=u, t=t)
         dxdt = falling_wing_sys.dynamics(t=dt, x=x, u=u)
         dxdt_linear = linear_sys.dynamics(t=dt, x=x, u=u)
-        Q = np.array([
-            [1.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-            [0.0, 1.0, 0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0001, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 1.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0, 1.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0, 0.0, 0.0001],
-        ])
-        R = np.eye(linear_sys.ninputs)
-        try:
-            # print(ct.ctrb(linear_sys.A, linear_sys.B))
-            gain_K, S, E = ct.dlqr(linear_sys.A, linear_sys.B, Q, R)
-            print(gain_K)
-            u = -gain_K @ x
-            print(u)
-        except np.linalg.LinAlgError as e:
-            print(e)
+
         t += dt
         x += dxdt * dt
         x_linear += dxdt_linear * dt
