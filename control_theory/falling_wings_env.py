@@ -3,7 +3,7 @@ import numpy as np
 import tqdm
 
 from matplotlib import pyplot as plt
-from control_theory.falling_wings import falling_wing_fn
+from control_theory.falling_wings import falling_wings_update
 from control_theory.pid import PIDControl
 from control_theory.q_learning import QLearningQuant
 from control_theory.quantizer import Quantizer
@@ -33,7 +33,7 @@ class FallingWingsEnv:
         self._params_gen = ParamsGenerator()
         self._fill_params_generator()
         self.nl_io_sys = control.NonlinearIOSystem(
-            falling_wing_fn,
+            falling_wings_update,
             inputs=('u_alpha', 'u_beta'),
             states=('x velocity', 'y velocity', 'z velocity', 'x position', 'y position', 'z position'),
             params=self._params_gen.generate()

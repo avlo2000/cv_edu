@@ -11,14 +11,15 @@ print(torch.cuda.is_available())
 
 wave_speed = 2.1
 freq = torch.tensor(0.2)
+wavelen = wave_speed / freq
 
 em_sim = EMSim(
     -50, 50, 600,
     -50, 50, 600
 )
-em_sim.add_reflector(SegmentReflector(torch.tensor([-20, -20.0]), torch.tensor([-20, 20.0])))
-em_sim.add_reflector(SegmentReflector(torch.tensor([20, -20.0]), torch.tensor([20, 20.0])))
-em_sim.add_point_source(PointSource(torch.tensor([0.0, 0.0])))
+
+for i in range(5):
+    em_sim.add_point_source(PointSource(torch.tensor([0.0, i * wavelen ])))
 mx_amp = 20
 dists, mask = em_sim.calculate_distmaps()
 
