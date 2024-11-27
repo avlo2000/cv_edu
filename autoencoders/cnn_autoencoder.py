@@ -18,8 +18,11 @@ class Encoder(nn.Module):
         )
 
         self.flatten = nn.Flatten(start_dim=1)
+
+        dummy = torch.zeros([1, *in_shape])
+        dummy_l = self.flatten(self.encoder_cnn(dummy))
         self.encoder_lin = nn.Sequential(
-            nn.Linear(7 * 7 * 32, 128),
+            nn.Linear(dummy_l.shape[1], 128),
             nn.ReLU(True),
             nn.Linear(128, encoded_space_dim)
         )

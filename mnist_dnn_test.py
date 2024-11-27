@@ -3,19 +3,9 @@ import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 
 
 import matplotlib.pyplot as plt # plotting library
-
-
-from keras.models import Sequential
-from keras.layers import Dense , Activation, Dropout
-from keras.optimizers import Adam ,RMSprop
-from keras import  backend as K
-
-from keras.models import Sequential
-from keras.layers import Dense, Activation, Dropout
-from keras.utils import to_categorical, plot_model
-from keras.datasets import mnist
-from keras.models import load_model
-
+from keras.src.datasets import mnist
+from keras.src.saving import load_model
+from tensorflow.python.keras.utils.np_utils import to_categorical
 
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 y_test = to_categorical(y_test)

@@ -61,7 +61,7 @@ def main():
     ax.set_ylim([-2, 2])
 
     def on_click(event: MouseEvent) -> Any:
-        wp1 = Waypoint2d(event.xdata, event.ydata, 1.001*np.pi/2)
+        wp1 = Waypoint2d(event.xdata, event.ydata, 1.001*np.pi)
         path = calc_path(wp0, wp1)
 
         x, y = path.trace(200)

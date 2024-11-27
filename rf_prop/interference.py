@@ -10,15 +10,27 @@ from rf_prop.reflectors import SegmentReflector
 print(torch.cuda.is_available())
 
 wave_speed = 2.1
-freq = torch.tensor(0.2)
+freq = torch.tensor(0.1)
 
 em_sim = EMSim(
-    -50, 50, 600,
-    -50, 50, 600
+    -400, 400, 700,
+    -400, 400, 700
 )
-em_sim.add_reflector(SegmentReflector(torch.tensor([-20, -20.0]), torch.tensor([-20, 20.0])))
-em_sim.add_reflector(SegmentReflector(torch.tensor([20, -20.0]), torch.tensor([20, 20.0])))
-em_sim.add_point_source(PointSource(torch.tensor([0.0, 0.0])))
+# em_sim.add_reflector(SegmentReflector(torch.tensor([-20, -20.0]), torch.tensor([-20, 20.0])))
+# em_sim.add_reflector(SegmentReflector(torch.tensor([20, -20.0]), torch.tensor([20, 20.0])))
+wavelen = wave_speed/freq
+n_ant_cols = 40
+n_ant_rows = 1
+phases = 40 * torch.linspace(0.0, torch.pi / 2, n_ant_cols)
+for i in range(n_ant_cols):
+    for j in range(n_ant_rows):
+        em_sim.add_point_source(
+            PointSource(
+                torch.tensor([0.5 * j * wavelen, 0.5 * i * wavelen]),
+                wave_speed / freq,
+                phases[i] + 6 * torch.pi * j / wavelen
+            )
+        )
 mx_amp = 20
 dists, mask = em_sim.calculate_distmaps()
 

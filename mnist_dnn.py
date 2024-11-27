@@ -1,21 +1,10 @@
 import numpy as np
 
 import matplotlib.pyplot as plt # plotting library
-
-
-from keras.models import Sequential
-from keras.layers import Dense , Activation, Dropout
-from keras.optimizers import Adam ,RMSprop
-from keras import  backend as K
-
-from keras.models import Sequential
-from keras.layers import Dense, Activation, Dropout
-from keras.utils import to_categorical, plot_model
-
-from subprocess import check_output
-
-from keras.datasets import mnist
-
+from keras import Sequential
+from keras.src.datasets import mnist
+from keras.src.layers import Dense, Activation, Dropout
+from keras.src.utils import to_categorical
 
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 

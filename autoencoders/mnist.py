@@ -40,7 +40,7 @@ model = Autoencoder(in_shape=in_shape, encoded_space_dim=2).to(device)
 summary(model, input_size=in_shape, device=device)
 
 try_out(model, next(iter(test_data_loader))[0], device)
-train(model, 5, train_data_loader, device)
+train(model, 29, train_data_loader, device)
 print("Testing...")
 plot_latent_space(model, test_data, device, classes)
 try_out(model, next(iter(test_data_loader))[0], device)

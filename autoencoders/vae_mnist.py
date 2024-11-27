@@ -1,6 +1,5 @@
 import torch.utils.data
 
-import torch.utils.data
 import torchvision.transforms as transforms
 from torchsummary import summary
 from torchvision import datasets

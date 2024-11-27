@@ -13,8 +13,14 @@ class Source(abc.ABC):
 
 
 class PointSource(Source):
-    def __init__(self, loc: torch.Tensor):
+    def __init__(self,
+                 loc: torch.Tensor,
+                 wavelen: torch.Tensor,
+                 phs: torch.Tensor = torch.tensor(0.0),
+                ):
         self.loc = loc
+        self.wavelen = wavelen
+        self.phs = phs
         self.reflectors: List = []
 
     def add_reflector(self, ref):
@@ -27,7 +33,7 @@ class PointSource(Source):
         for ref in self.reflectors:
             bright_mask *= ~ref.dark_zone(self, x_mesh, y_mesh)
         points = torch.stack([d_x, d_y])
-        ds = torch.linalg.norm(points, dim=0)[None, ...]
+        ds = torch.linalg.norm(points, dim=0)[None, ...] + self.wavelen * self.phs / (2.0 * torch.pi)
         return DistMap(dist=ds, mask=bright_mask)
 
 
